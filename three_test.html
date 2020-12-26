@@ -45,6 +45,11 @@
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
 import {OrbitControls} from 'https://unpkg.com/three@0.108.0/examples/jsm/controls/OrbitControls.js';
 import {DragControls} from 'https://unpkg.com/three@0.108.0/examples/jsm/controls/DragControls.js';
+import Stats from 'https://unpkg.com/three@0.108.0/examples/jsm/libs/stats.module.js';
+
+
+
+
 
 
 let globalControl = null;
@@ -52,6 +57,12 @@ let globalControl = null;
 function main() {
   const canvas = document.querySelector('#c');
   const renderer = new THREE.WebGLRenderer({canvas});
+
+
+var stats = new Stats();
+stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild( stats.dom );
+stats.update();
 
   const camera = new THREE.PerspectiveCamera(80, 2, 0.1, 6);
   camera.position.z = 2;
@@ -107,13 +118,22 @@ globalControl = controls;
 
 
 
+
+
+
+
 function render(time) {
+
+
+stats.begin();
+
 	time *= 0.001;
 //	cube.rotation.x = 4;
 //	cube.rotation.y = time;
   
 
   controls.update();
+  stats.update();
 
 
 	  if (resizeRendererToDisplaySize(renderer)) {
@@ -147,8 +167,7 @@ function resizeRendererToDisplaySize(renderer) {
 
 
 
-
-
+stats.end();
   requestAnimationFrame(render);
 
 }
@@ -171,6 +190,8 @@ main();
 
 
 </script>
+
+
 
 
 
