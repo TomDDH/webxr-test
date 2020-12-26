@@ -2,6 +2,19 @@
 <html>
 <head>
 	<title></title>
+
+	  <script src="https://code.jquery.com/pep/0.4.2/pep.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+        <script src="https://preview.babylonjs.com/ammo.js"></script>
+        <script src="https://preview.babylonjs.com/cannon.js"></script>
+        <script src="https://preview.babylonjs.com/Oimo.js"></script>
+        <script src="https://preview.babylonjs.com/earcut.min.js"></script>
+        <script src="https://preview.babylonjs.com/babylon.js"></script>
+        <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+        <script src="https://preview.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+        <script src="https://preview.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+        <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+        <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
 	<style>
 		html, body {
    margin: 0;
@@ -100,50 +113,53 @@ globalControl = controls;
  //      scene.add(root);
  //  });
 
+  const environment = new BABYLON.HDRCubeTexture("https://virbikes.s3.us-east-2.amazonaws.com/scene/small_rural_road_1k.hdr", scene, 256, false, true, false, true);
+    scene.environment = environment;
+    scene.background = environment;
 
- new RGBELoader()
-					.setDataType( THREE.UnsignedByteType )
-					.setPath( 'https://virbikes.s3.us-east-2.amazonaws.com/scene/' )
-					.load( 'small_rural_road_1k.hdr', function ( texture ) {
+ // new RGBELoader()
+	// 				.setDataType( THREE.UnsignedByteType )
+	// 				.setPath( 'https://virbikes.s3.us-east-2.amazonaws.com/scene/' )
+	// 				.load( 'small_rural_road_1k.hdr', function ( texture ) {
 
-						const envMap = pmremGenerator.fromEquirectangular( texture ).texture;
+	// 					const envMap = pmremGenerator.fromEquirectangular( texture ).texture;
 
-						scene.background = envMap;
-						scene.environment = envMap;
+	// 					scene.background = envMap;
+	// 					scene.environment = envMap;
 
-						texture.dispose();
-						pmremGenerator.dispose();
+	// 					texture.dispose();
+	// 					pmremGenerator.dispose();
 
-						render();
+	// 					render();
 
-						// model
+	// 					// model
 
-						// use of RoughnessMipmapper is optional
-						const roughnessMipmapper = new RoughnessMipmapper( renderer );
+	// 					// use of RoughnessMipmapper is optional
+	// 					const roughnessMipmapper = new RoughnessMipmapper( renderer );
 
-						const loader = new GLTFLoader().setPath( 'https://virbikes.s3.us-east-2.amazonaws.com/flexi_project/scene/models/' );
-						loader.load( 'color_1.glb', function ( gltf ) {
+	// 					const loader = new GLTFLoader().setPath( 'https://virbikes.s3.us-east-2.amazonaws.com/flexi_project/scene/models/' );
+	// 					loader.load( 'color_1.glb', function ( gltf ) {
 
-							gltf.scene.traverse( function ( child ) {
+	// 						gltf.scene.traverse( function ( child ) {
 
-								if ( child.isMesh ) {
+	// 							if ( child.isMesh ) {
 
-									// TOFIX RoughnessMipmapper seems to be broken with WebGL 2.0
-									// roughnessMipmapper.generateMipmaps( child.material );
+	// 								// TOFIX RoughnessMipmapper seems to be broken with WebGL 2.0
+	// 								// roughnessMipmapper.generateMipmaps( child.material );
 
-								}
+	// 							}
 
-							} );
+	// 						} );
 
-							scene.add( gltf.scene );
+	// 						scene.add( gltf.scene );
 
-							// roughnessMipmapper.dispose();
+	// 						// roughnessMipmapper.dispose();
 
-							render();
+	// 						render();
 
-						} );
+	// 					} );
 
-					} );
+	// 				} );
 
 
 
