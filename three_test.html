@@ -1,35 +1,178 @@
-<html>  
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style>
+		html, body {
+   margin: 0;
+   height: 100%;
+}
+		
+		#c {
+			width: 100%;
+			height: 100%;
+			display: block;
+
+		}
+
+.container{
+	position: absolute;
+
+	top: 0;
+	left: 50%;
+	width: 50px;
+	height: 50px;
+} 
+
+
+	</style>
+</head>
 <body>
-  <div>tree test</div>
-<canvas id="c"></canvas>
+
+	  <canvas id="c"></canvas>
+
+	  <div class="container">
+	  <button class="button" id="turncube">turn cube</button>
+	  <button class="button" id="reset">reset</button>
+	</div>
+
+
 </body>
 
+
 <script type="module">
-// import * as THREE from './learn-webxr/libs/three/three.module.js';
- import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
+	
+import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
+import {OrbitControls} from 'https://unpkg.com/three@0.108.0/examples/jsm/controls/OrbitControls.js';
+import {DragControls} from 'https://unpkg.com/three@0.108.0/examples/jsm/controls/DragControls.js';
+
+
+let globalControl = null;
 
 function main() {
   const canvas = document.querySelector('#c');
   const renderer = new THREE.WebGLRenderer({canvas});
 
-  
-  const camera = new THREE.PerspectiveCamera(80, 2, 0.1, 10);
-  
-  camera.position.z =3;
-  
-  const scene = new THREE.Scene();
-  
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
-  
-  const material = new THREE.MeshBasicMaterial({color: 0x44aa88});
-  
-  const cube = new THREE.Mesh(geometry, material);
+  const camera = new THREE.PerspectiveCamera(80, 2, 0.1, 6);
+  camera.position.z = 2;
 
+
+  const controls = new OrbitControls( camera, renderer.domElement );
+
+  controls.update();
+
+  controls.autoRotate = true;
+
+globalControl = controls;
+
+
+  const scene = new THREE.Scene();
+
+  const geometry = new THREE.BoxGeometry(1, 1, 1);
+
+  const material = new THREE.MeshPhongMaterial({color: 0x44aa88});  // greenish blue
+
+
+  const cube = new THREE.Mesh(geometry, material);
   scene.add(cube);
-  renderer.render(scene, camera);
+
+
+    // const light = new THREE.DirectionalLight();
+    // light.position.set(-1, 2, 4);
+    // scene.add(light);
+
+
+      const light2 = new THREE.HemisphereLight(0xFFFFFF,0x393939,1);
+    scene.add(light2);
+
+
+    let value=0;
+    document.getElementById("turncube").addEventListener("click", function() {
+
+    value +=0.1;
+	cube.rotation.x = value;
+
+  material.color.set('red'); 
+
+
+	console.log(value);
+
+
+});
+
+
+
+
+
+
+
+
+function render(time) {
+	time *= 0.001;
+//	cube.rotation.x = 4;
+//	cube.rotation.y = time;
   
+
+  controls.update();
+
+
+	  if (resizeRendererToDisplaySize(renderer)) {
+      const canvas = renderer.domElement;
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
+    }
+
+	renderer.render(scene,camera);
+	requestAnimationFrame(render);
+
+
+const canvas = renderer.domElement;
+  camera.aspect = canvas.clientWidth / canvas.clientHeight;
+  camera.updateProjectionMatrix();
+
+	
 }
-  main();
+
+
+function resizeRendererToDisplaySize(renderer) {
+  const canvas = renderer.domElement;
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+  const needResize = canvas.width !== width || canvas.height !== height;
+  if (needResize) {
+    renderer.setSize(width, height, false);
+  }
+  return needResize;
+}
+
+
+
+
+
+  requestAnimationFrame(render);
+
+}
+
+
+
+
+document.getElementById("reset").addEventListener("click", function() {
+
+globalControl.reset();
+
+});
+
+
+main();
+
+
+
+
+
 
 </script>
+
+
+
+
 </html>
